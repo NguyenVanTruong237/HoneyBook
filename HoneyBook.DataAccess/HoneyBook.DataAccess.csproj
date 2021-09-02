@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\HoneyBook.Models\HoneyBook.Models.csproj" />
     <ProjectReference Include="..\HoneyBook.Utility\HoneyBook.Utility.csproj" />
   </ItemGroup>
