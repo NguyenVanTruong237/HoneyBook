@@ -1,6 +1,6 @@
 using System;
 
-namespace HoneyBook.Models
+namespace HoneyBook.Models.ViewModels
 {
     public class ErrorViewModel
     {

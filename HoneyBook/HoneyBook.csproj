@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HoneyBook.DataAccess\HoneyBook.DataAccess.csproj" />
+    <ProjectReference Include="..\HoneyBook.Models\HoneyBook.Models.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HoneyBook.Data
+namespace HoneyBook.DataAccess.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

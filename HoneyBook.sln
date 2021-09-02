@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoneyBook", "HoneyBook\HoneyBook.csproj", "{E81FDB5E-3CA3-4CC1-A2D8-7E9E9821E5E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoneyBook.DataAccess", "HoneyBook.DataAccess\HoneyBook.DataAccess.csproj", "{959711F9-239D-438F-9B7D-CB47A029BA49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoneyBook.Models", "HoneyBook.Models\HoneyBook.Models.csproj", "{A9977A29-D7F4-4898-912A-6951D2B8A7E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoneyBook.Utility", "HoneyBook.Utility\HoneyBook.Utility.csproj", "{6CA89BB2-2A36-46A5-A749-AD3A86074731}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{E81FDB5E-3CA3-4CC1-A2D8-7E9E9821E5E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E81FDB5E-3CA3-4CC1-A2D8-7E9E9821E5E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E81FDB5E-3CA3-4CC1-A2D8-7E9E9821E5E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{959711F9-239D-438F-9B7D-CB47A029BA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{959711F9-239D-438F-9B7D-CB47A029BA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{959711F9-239D-438F-9B7D-CB47A029BA49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{959711F9-239D-438F-9B7D-CB47A029BA49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9977A29-D7F4-4898-912A-6951D2B8A7E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9977A29-D7F4-4898-912A-6951D2B8A7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9977A29-D7F4-4898-912A-6951D2B8A7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9977A29-D7F4-4898-912A-6951D2B8A7E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CA89BB2-2A36-46A5-A749-AD3A86074731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA89BB2-2A36-46A5-A749-AD3A86074731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA89BB2-2A36-46A5-A749-AD3A86074731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA89BB2-2A36-46A5-A749-AD3A86074731}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
