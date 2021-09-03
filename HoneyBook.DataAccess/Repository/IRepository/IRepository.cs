@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace HoneyBook.DataAccess.Repository.IRepository
 {
-    public interface IRepository<T> where T :class
+    public interface IRepository<T> where T :class //Ràng buộc T là class
     {
-        T Get(int id);
-        IEnumerable<T> GetAll(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            string includeProPerties = null
+        T Get(int id);  //Get id trong class T
+        IEnumerable<T> GetAll(          //Get list object T
+            Expression<Func<T, bool>> filter = null,        //định nghĩa filter(data của class T) = null  sẽ là true 
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,    //Định nghĩa orderby(1 list object class T) = null sẽ là true
+            string includeProPerties = null         
             );
         T GetFirstOrDefault(
-            Expression<Func<T, bool>> filter = null,
+            Expression<Func<T, bool>> filter = null,        
             string includeProPerties = null
             );
         void Add(T entity);
