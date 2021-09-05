@@ -21,8 +21,4 @@
     <ProjectReference Include="..\HoneyBook.Models\HoneyBook.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
-  </ItemGroup>
-
 </Project>
