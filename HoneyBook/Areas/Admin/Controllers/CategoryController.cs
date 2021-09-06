@@ -62,6 +62,18 @@ namespace HoneyBook.Areas.Admin.Controllers
             var allObj = _unitOfWork.Category.GetAll();
             return Json(new { data = allObj });
         }
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var objInDb = _unitOfWork.Category.Get(id);
+            if (objInDb == null)
+            {
+                return Json(new { success = false, message = "Xóa thất bại." });
+            }
+            _unitOfWork.Category.Remove(id);
+            _unitOfWork.save();
+            return Json(new { success = true, message = "Xóa thành công."});
+        }
         #endregion
     }
 }
