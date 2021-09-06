@@ -1,4 +1,5 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
+using HoneyBook.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,20 @@ namespace HoneyBook.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult Upsert(int? id)
+        {
+            Category category = new Category();
+            if (id == null)
+            {
+                return View(category);
+            }
+            category = _unitOfWork.Category.Get(id.GetValueOrDefault()); //GetValueOrDefault: nếu giá trị id == null sẽ trả về mặc định là null
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
         }
         #region API CALLS
         [HttpGet]
