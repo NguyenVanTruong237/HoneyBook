@@ -1,5 +1,8 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
+<<<<<<< HEAD
 using HoneyBook.Models;
+=======
+>>>>>>> 11ee9ef196c2906550041e9b423395249a9da01e
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
