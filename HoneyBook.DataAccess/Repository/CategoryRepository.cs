@@ -22,7 +22,6 @@ namespace HoneyBook.DataAccess.Repository
             if (objfromDb != null)
             {
                 objfromDb.Name = category.Name;
-                _db.SaveChanges();
             }
         }
     }

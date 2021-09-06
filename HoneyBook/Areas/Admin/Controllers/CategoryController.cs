@@ -35,6 +35,26 @@ namespace HoneyBook.Areas.Admin.Controllers
             }
             return View(category);
         }
+        [HttpPost] // định tuyến: nhận data từ view(upsert)
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                if (category.Id == 0)
+                {
+                    _unitOfWork.Category.Add(category);
+
+                }
+                else
+                {
+                    _unitOfWork.Category.Update(category);
+                }
+                _unitOfWork.save();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(category);
+        }
         #region API CALLS
         [HttpGet]
         public IActionResult GetAll()
