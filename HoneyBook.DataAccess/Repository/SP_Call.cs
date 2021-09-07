@@ -66,13 +66,13 @@ namespace HoneyBook.DataAccess.Repository
             }
         }
 
-        public T OneRecord<T>(string procedureName, DynamicParameters param = null)     //Get 1 row thuộc tính của table 
+        public T OneRecord<T>(string procedureName, DynamicParameters param = null)     //Get 1 hàng của table trong db
         {
             using (SqlConnection sqlCon = new SqlConnection(ConnectionString))
             {
                 sqlCon.Open();
                 var value = sqlCon.Query<T>(procedureName, param, commandType: System.Data.CommandType.StoredProcedure);
-                return (T)Convert.ChangeType(value.FirstOrDefault(), typeof(T));    
+                return (T)Convert.ChangeType(value.FirstOrDefault(), typeof(T));    // value.FirstOrDefault(): trả về data về value theo id truyền vào para, nếu k có thì trả value về null, và ép kiểu về class
             }
         }
 

@@ -15,9 +15,9 @@ namespace HoneyBook.DataAccess.Repository
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
-            Category = new CategoryRepository(db);
-            CoverType = new CoverTypeRepository(db);
-            SP_Call = new SP_Call(db);
+            Category = new CategoryRepository(_db);
+            CoverType = new CoverTypeRepository(_db);
+            SP_Call = new SP_Call(_db);
 
         }
 
