@@ -9,6 +9,7 @@ namespace HoneyBook.DataAccess.Repository.IRepository
     public interface IUnitOfWork : IDisposable
     {
         ICategoryRepository Category { get; }
+        IProductRepository Product { get; }
         ICoverTypeRepository CoverType { get; }
         ISP_Call SP_Call { get; }
 
