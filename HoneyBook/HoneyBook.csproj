@@ -21,4 +21,8 @@
     <ProjectReference Include="..\HoneyBook.Models\HoneyBook.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\products\" />
+  </ItemGroup>
+
 </Project>
