@@ -52,7 +52,7 @@ namespace HoneyBook.Areas.Admin.Controllers
                 _unitOfWork.save();
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return View(coverType);
         }
 
 
