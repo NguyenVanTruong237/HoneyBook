@@ -11,6 +11,7 @@ namespace HoneyBook.DataAccess.Repository.IRepository
         ICategoryRepository Category { get; }
         IProductRepository Product { get; }
         ICoverTypeRepository CoverType { get; }
+        ICompanyRepository Company { get; }
         ISP_Call SP_Call { get; }
 
         void save();
