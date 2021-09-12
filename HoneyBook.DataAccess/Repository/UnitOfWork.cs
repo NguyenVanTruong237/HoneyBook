@@ -19,6 +19,7 @@ namespace HoneyBook.DataAccess.Repository
             CoverType = new CoverTypeRepository(_db);
             Product = new ProductRepository(_db);
             Company = new CompanyRepository(_db);
+            ApplicationUser = new ApplicationUserRepository(_db);
             SP_Call = new SP_Call(_db);
         }
 
@@ -32,7 +33,9 @@ namespace HoneyBook.DataAccess.Repository
 
         public ICompanyRepository Company { get; private set; }
 
-        public void Dispose()
+        public IApplicationUserRepository ApplicationUser  { get; private set; }
+
+    public void Dispose()
         {
             _db.Dispose();
         }
