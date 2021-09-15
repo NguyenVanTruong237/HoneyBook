@@ -26,7 +26,7 @@ namespace HoneyBook.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var userList = _db.ApplicationUsers.Include(c => c.Company).ToList();
+            var userList = _db.ApplicationUsers.Include(c => c.Company).ToList(); 
             var userRole = _db.UserRoles.ToList();
             var roleList = _db.Roles.ToList();
             foreach (var user in userList)
@@ -37,7 +37,7 @@ namespace HoneyBook.Areas.Admin.Controllers
                 {
                     user.Company = new Company()
                     {
-                        Name = ""
+                        Name = "",
                     };
                 }
             }

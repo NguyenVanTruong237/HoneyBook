@@ -185,7 +185,7 @@ namespace HoneyBook.Areas.Identity.Pages.Account
                         }
                         else
                         {
-                            return RedirectToAction("Index", "User", new { Areas = "Admin" });
+                            return RedirectToAction("Index", "User", new { Area = "Admin" });
                         }
                         
                     }
