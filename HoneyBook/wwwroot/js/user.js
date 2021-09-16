@@ -1,4 +1,5 @@
-﻿var dataTable;
+﻿
+var dataTable;
 
 $(document).ready(function () {
     loadDataTable();
@@ -15,20 +16,55 @@ function loadDataTable() {
             { "data": "phoneNumber", "width": "15%" },
             { "data": "company.name", "width": "15%" },
             { "data": "role", "width": "15%" },
+            {
+                "data": {
+                    id: "id", lockoutEnd: "lockoutEnd"
+                },
+                "render": function (data) {
+                var today = new Date().getTime();
+                var lockout = new Date(data.lockoutEnd).getTime();
+                    if (lockout > today) {
+                    //user đang bị lock
+                        return `
+                            <div class ="text-center">
+                    <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer">
+                           <i class="fas fa-unlock-alt"></i>Unlock
+                        </a>
+                            </div>
+                            `;
+                    }
+                    else {
+                        return `
+                            <div class = "text-center"
+                    <a  onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer">
+                            <i class="fas fa-user-lock"></i> Lock
+                        </a>
+                            </div>
+                            `;
+                    }
+                }
 
-            //{
-            //    "data": "id",
-            //    "render": function (data) {
-            //        return `
-            //        <a href="Category/Upsert/${data}" class="btn btn-primary text-white" style="cursor:pointer">
-            //                <i class="far fa-edit"></i>
-            //            </a>
-            //            <a  onclick=Delete("/Admin/Category/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-            //                <i class="fas fa-trash"></i>
-            //            </a>`;
-            //    }
-            //}
+                    
+            }
         ]
 
+    });
+}
+function LockUnlock(id) {
+    $.ajax({
+        type: "POST",
+        url: '/Admin/User/LockUnlock',
+        data: JSON.stringify(id),
+        contentType: "application/json",
+        success: function (data) {
+            if (data.success) {
+                toastr.success(data.message);
+                dataTable.ajax.reload();
+            }
+            else {
+                toastr.error(data.message);
+
+            }
+        }
     });
 }

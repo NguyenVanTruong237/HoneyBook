@@ -43,6 +43,25 @@ namespace HoneyBook.Areas.Admin.Controllers
             }
             return Json(new { data = userList });
         }
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody] string id)
+        {
+            var objInDb = _db.ApplicationUsers.FirstOrDefault(c => c.Id == id);
+            if (objInDb == null)
+            {
+                return Json(new { success = false, message = "Oop lỗi rồi fen!" });
+            }
+            if (objInDb.LockoutEnd!=null&&objInDb.LockoutEnd>DateTime.Now)
+            {
+                objInDb.LockoutEnd = DateTime.Now;
+            }
+            else
+            {
+                objInDb.LockoutEnd = DateTime.Now.AddYears(1000);
+            }
+            _db.SaveChanges();
+            return Json(new { success = true, message = "Thành công!" });
+        }
         #endregion
     }
 }
