@@ -51,6 +51,11 @@ namespace HoneyBook
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
+            services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = "234192488660126";
+                options.AppSecret = "d6ca1361641bf6c96ae4daf3d4ff81f1";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
