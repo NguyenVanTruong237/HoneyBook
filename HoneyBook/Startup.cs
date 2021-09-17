@@ -56,6 +56,11 @@ namespace HoneyBook
                 options.AppId = "234192488660126";
                 options.AppSecret = "d6ca1361641bf6c96ae4daf3d4ff81f1";
             });
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = "959927042886-b2rpipi49nj7tssmp58m52dom3b6uirh.apps.googleusercontent.com";
+                options.ClientSecret = "Xq8xfqN0JXdJKE_doF5-ecET";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
