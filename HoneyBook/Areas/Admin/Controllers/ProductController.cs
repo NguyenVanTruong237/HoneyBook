@@ -1,6 +1,8 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
 using HoneyBook.Models;
 using HoneyBook.Models.ViewModels;
+using HoneyBook.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +13,7 @@ using System.Linq;
 namespace HoneyBook.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
