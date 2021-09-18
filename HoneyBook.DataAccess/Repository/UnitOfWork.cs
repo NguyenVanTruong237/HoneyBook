@@ -20,6 +20,9 @@ namespace HoneyBook.DataAccess.Repository
             Product = new ProductRepository(_db);
             Company = new CompanyRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
+            OrderDetails = new OrderDetailsRepository(_db);
+            ShoppingCart = new ShoppingCartRepository(_db);
+            OrderHeader = new OrderHeaderRepository(_db);
             SP_Call = new SP_Call(_db);
         }
 
@@ -35,7 +38,13 @@ namespace HoneyBook.DataAccess.Repository
 
         public IApplicationUserRepository ApplicationUser  { get; private set; }
 
-    public void Dispose()
+        public IShoppingCartRepository ShoppingCart { get; private set; }
+
+        public IOrderHeaderRepository OrderHeader { get; private set; }
+
+        public IOrderDetailsRepository OrderDetails { get; private set; }
+
+        public void Dispose()
         {
             _db.Dispose();
         }
