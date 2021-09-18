@@ -24,8 +24,8 @@ namespace HoneyBook.Utility
         private Task Execute(string sendGridKey, string subject, string message, string email)
         {
             var client = new SendGridClient(sendGridKey);
-            var from = new EmailAddress("toiiuvn012@gmail.com", "HoneyBook");
-            var to = new EmailAddress(email, "End User");
+            var from = new EmailAddress("toiiuvn012@gmail.com", "Admin Trường 10 Ngón");
+            var to = new EmailAddress(email, "For you");
             var msg = MailHelper.CreateSingleEmail(from, to, subject, "", message);
             return client.SendEmailAsync(msg);
         }
