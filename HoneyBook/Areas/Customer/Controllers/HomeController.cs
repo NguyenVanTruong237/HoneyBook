@@ -30,6 +30,14 @@ namespace HoneyBook.Areas.Customer.Controllers
         public IActionResult Index()
         {
             IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProPerties: "Category,CoverType");
+
+            var claimIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim !=null)
+            {
+                var count = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value).Count();
+                HttpContext.Session.SetInt32(SD.ssShoppingCart, count);
+            }
             return View(products);
         }
 
@@ -71,13 +79,14 @@ namespace HoneyBook.Areas.Customer.Controllers
                 }
                 _unitOfWork.save();
 
-                var count = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cartObject.ApplicationUserId).ToList().Count();
-                // Tạo session với value là 1 object 
-                //HttpContext.Session.SetObject(SD.ssShoppingCart, cartObject);
-                //var obj = HttpContext.Session.GetObject<ShoppingCart>(SD.ssShoppingCart);
+                var count = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cartObject.ApplicationUserId).Count();
 
                 // Tạo session có value là số nguyên
                 HttpContext.Session.SetInt32(SD.ssShoppingCart, count);
+
+                // Tạo session với value là 1 object 
+                //HttpContext.Session.SetObject(SD.ssShoppingCart, cartObject);
+                //var obj = HttpContext.Session.GetObject<ShoppingCart>(SD.ssShoppingCart);
 
                 return RedirectToAction(nameof(Index));
             }
