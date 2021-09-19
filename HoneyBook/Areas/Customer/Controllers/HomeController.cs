@@ -1,7 +1,9 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
 using HoneyBook.Models;
 using HoneyBook.Models.ViewModels;
+using HoneyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -68,6 +70,15 @@ namespace HoneyBook.Areas.Customer.Controllers
                    // _unitOfWork.ShoppingCart.Update(cartObject);
                 }
                 _unitOfWork.save();
+
+                var count = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cartObject.ApplicationUserId).ToList().Count();
+                // Tạo session với value là 1 object 
+                //HttpContext.Session.SetObject(SD.ssShoppingCart, cartObject);
+                //var obj = HttpContext.Session.GetObject<ShoppingCart>(SD.ssShoppingCart);
+
+                // Tạo session có value là số nguyên
+                HttpContext.Session.SetInt32(SD.ssShoppingCart, count);
+
                 return RedirectToAction(nameof(Index));
             }
             else

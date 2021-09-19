@@ -62,6 +62,12 @@ namespace HoneyBook
                 options.ClientId = "959927042886-b2rpipi49nj7tssmp58m52dom3b6uirh.apps.googleusercontent.com";
                 options.ClientSecret = "Xq8xfqN0JXdJKE_doF5-ecET";
             });
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,7 +88,7 @@ namespace HoneyBook
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
