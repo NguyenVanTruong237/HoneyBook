@@ -60,7 +60,7 @@ namespace HoneyBook.DataAccess.Repository
             }
             if (includeProPerties != null)
             {
-                foreach (var includeProp in includeProPerties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))   //cắt data từng thuộc tính của class về query
+                foreach (var includeProp in includeProPerties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))   //cắt data từng thuộc tính của class về query
                 {
                     query = query.Include(includeProp);
                 }

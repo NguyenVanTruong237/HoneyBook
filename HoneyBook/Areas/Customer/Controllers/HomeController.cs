@@ -29,9 +29,15 @@ namespace HoneyBook.Areas.Customer.Controllers
             return View(products);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Details(int id)
         {
-            return View();
+            var objInDb = _unitOfWork.Product.GetFirstOrDefault(c => c.Id == id, includeProPerties: "Category,CoverType");
+            ShoppingCart shoppingCart = new ShoppingCart()
+            {
+                ProductId = objInDb.Id,
+                Product = objInDb
+            };
+            return View(shoppingCart);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
