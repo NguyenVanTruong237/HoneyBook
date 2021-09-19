@@ -1,12 +1,14 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
 using HoneyBook.Models;
 using HoneyBook.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HoneyBook.Areas.Customer.Controllers
@@ -39,7 +41,46 @@ namespace HoneyBook.Areas.Customer.Controllers
             };
             return View(shoppingCart);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Details(ShoppingCart cartObject)
+        {
+            cartObject.Id = 0;
+            if (ModelState.IsValid)
+            {
+                //Get User Id
+                var claimIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                cartObject.ApplicationUserId = claim.Value;
 
+                ShoppingCart cartInDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(
+                    u => u.ApplicationUserId == cartObject.ApplicationUserId && u.ProductId == cartObject.ProductId
+                    , includeProPerties: "Product");
+
+                if (cartInDb == null)
+                {
+                    _unitOfWork.ShoppingCart.Add(cartObject);
+                }
+                else
+                {
+                    cartInDb.Count += cartObject.Count;
+                   // _unitOfWork.ShoppingCart.Update(cartObject);
+                }
+                _unitOfWork.save();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                var productInDb = _unitOfWork.Product.GetFirstOrDefault(c => c.Id == cartObject.ProductId, includeProPerties: "Category,CoverType");
+                ShoppingCart cartObj = new ShoppingCart()
+                {
+                    Product = productInDb,
+                    ProductId = productInDb.Id
+                };
+                return View(cartObj);
+            }
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
