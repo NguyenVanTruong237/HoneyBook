@@ -1,6 +1,7 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
 using HoneyBook.Models.ViewModels;
 using HoneyBook.Utility;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -81,6 +82,49 @@ namespace HoneyBook.Areas.Customer.Controllers
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             ModelState.AddModelError(string.Empty, "Xác thực mail của bạn đã được gửi, vui lòng check mail!");
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult plus(int cartid)
+        {
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(c => c.Id == cartid,includeProPerties: "Product");
+
+            cart.Count += 1;
+            cart.Price = SD.GetPriceBaseOnQuantity(cart.Count, cart.Product.Price
+                , cart.Product.Price50, cart.Product.Price100);
+
+            _unitOfWork.save();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult minus (int cartId)
+        {
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(c => c.Id == cartId, includeProPerties: "Product");
+
+            if (cart.Count == 1)
+            {
+                var cnt = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cart.ApplicationUserId).Count();
+                _unitOfWork.ShoppingCart.Remove(cart);
+                _unitOfWork.save();
+                HttpContext.Session.SetInt32(SD.ssShoppingCart, cnt - 1);
+            }
+            else
+            {
+                cart.Count += -1;
+                cart.Price= SD.GetPriceBaseOnQuantity(cart.Count, cart.Product.Price
+                , cart.Product.Price50, cart.Product.Price100);
+                _unitOfWork.save();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult remove (int cartId)
+        {
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(c => c.Id == cartId, includeProPerties: "Product");
+            var cnt = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cart.ApplicationUserId).Count();
+
+            _unitOfWork.ShoppingCart.Remove(cart);
+            _unitOfWork.save();
+            HttpContext.Session.SetInt32(SD.ssShoppingCart, cnt - 1);
+
             return RedirectToAction(nameof(Index));
         }
     }
