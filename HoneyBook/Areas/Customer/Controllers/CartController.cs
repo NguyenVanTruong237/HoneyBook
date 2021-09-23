@@ -52,7 +52,7 @@ namespace HoneyBook.Areas.Customer.Controllers
 
                 if (list.Product.Description.Length > 100)
                 {
-                    list.Product.Description = list.Product.Description.Substring(0, 99) + "...";
+                    list.Product.Description = list.Product.Description.Substring(0, 99) + " ...";
                 }
             }
             return View(shoppingCartVM);
@@ -85,7 +85,7 @@ namespace HoneyBook.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult plus(int cartid)
+        public IActionResult Plus(int cartid)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(c => c.Id == cartid,includeProPerties: "Product");
 
@@ -96,7 +96,7 @@ namespace HoneyBook.Areas.Customer.Controllers
             _unitOfWork.save();
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult minus (int cartId)
+        public IActionResult Minus (int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(c => c.Id == cartId, includeProPerties: "Product");
 
@@ -116,7 +116,7 @@ namespace HoneyBook.Areas.Customer.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult remove (int cartId)
+        public IActionResult Remove (int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(c => c.Id == cartId, includeProPerties: "Product");
             var cnt = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cart.ApplicationUserId).Count();
@@ -126,6 +126,32 @@ namespace HoneyBook.Areas.Customer.Controllers
             HttpContext.Session.SetInt32(SD.ssShoppingCart, cnt - 1);
 
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Summary()
+        {
+            var claimIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var shoppingCartVM = new ShoppingCartVM()
+            {
+                OrderHeader = new Models.OrderHeader(),
+                ShoppingCarts = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value, includeProPerties: "Product")
+            };
+            shoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(c => c.Id == claim.Value, includeProPerties: "Company");
+
+            foreach (var list in shoppingCartVM.ShoppingCarts)
+            {
+                list.Price = SD.GetPriceBaseOnQuantity(list.Count, list.Product.Price,list.Product.Price50,list.Product.Price100);
+                shoppingCartVM.OrderHeader.OrderTotal += list.Price * list.Count;
+            }
+            shoppingCartVM.OrderHeader.Name = shoppingCartVM.OrderHeader.ApplicationUser.Name;
+            shoppingCartVM.OrderHeader.PhoneNumber = shoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            shoppingCartVM.OrderHeader.StreetAddress = shoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
+            shoppingCartVM.OrderHeader.City = shoppingCartVM.OrderHeader.ApplicationUser.City;
+            shoppingCartVM.OrderHeader.State = shoppingCartVM.OrderHeader.ApplicationUser.State;
+            shoppingCartVM.OrderHeader.PostalCode = shoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
+
+            return View(shoppingCartVM);
         }
     }
 }
