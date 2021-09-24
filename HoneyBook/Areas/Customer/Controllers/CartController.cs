@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -158,7 +159,7 @@ namespace HoneyBook.Areas.Customer.Controllers
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-        public IActionResult SummaryPost(ShoppingCartVM shoppingCartVM)
+        public IActionResult SummaryPost(ShoppingCartVM shoppingCartVM, string stripeToken)
         {
             var claimIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -192,7 +193,41 @@ namespace HoneyBook.Areas.Customer.Controllers
                 _unitOfWork.OrderDetails.Add(orderDetails);
                 _unitOfWork.save();
             }
+
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCartVM.ShoppingCarts);
+            _unitOfWork.save();
+            HttpContext.Session.SetInt32(SD.ssShoppingCart, 0);
+
+            if (stripeToken == null)
+            {
+
+            }
+            else
+            {
+                var options = new ChargeCreateOptions
+                {
+                    Amount = Convert.ToInt32(shoppingCartVM.OrderHeader.OrderTotal * 100),
+                    Currency = "usd",
+                    Description = "Order ID : " + shoppingCartVM.OrderHeader.Id,
+                    Source = stripeToken
+                };
+                var service = new ChargeService();
+                Charge charge = service.Create(options);
+                if (charge.BalanceTransactionId == null)
+                {
+                    shoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
+                }
+                else
+                {
+                    shoppingCartVM.OrderHeader.TransactionId = charge.BalanceTransactionId;
+                }
+                if (charge.Status.ToLower() == "succeeded")
+                {
+                    shoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusApproved;
+                    shoppingCartVM.OrderHeader.OrderStatus = SD.StatusApproved;
+                    shoppingCartVM.OrderHeader.PaymentDate = DateTime.Now;
+                }
+            }
             _unitOfWork.save();
 
             return RedirectToAction("Orderinformation", "Cart", new { id = shoppingCartVM.OrderHeader.Id });
