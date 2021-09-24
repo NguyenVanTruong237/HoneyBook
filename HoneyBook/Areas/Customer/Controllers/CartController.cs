@@ -1,4 +1,5 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
+using HoneyBook.Models;
 using HoneyBook.Models.ViewModels;
 using HoneyBook.Utility;
 using Microsoft.AspNetCore.Http;
@@ -152,6 +153,50 @@ namespace HoneyBook.Areas.Customer.Controllers
             shoppingCartVM.OrderHeader.PostalCode = shoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
 
             return View(shoppingCartVM);
+        }
+
+        [HttpPost]
+        [ActionName("Summary")]
+        [ValidateAntiForgeryToken]
+        public IActionResult SummaryPost()
+        {
+            var claimIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var shoppingcartVM = new ShoppingCartVM();
+            shoppingcartVM.OrderHeader.ApplicationUser  
+                = _unitOfWork.ApplicationUser.GetFirstOrDefault(c => c.Id == claim.Value
+                , includeProPerties:"Company");
+            shoppingcartVM.ShoppingCarts 
+                = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value
+                , includeProPerties: "Product");
+
+            shoppingcartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            shoppingcartVM.OrderHeader.OrderStatus = SD.StatusPending;
+            shoppingcartVM.OrderHeader.ApplicationUserId = claim.Value;
+            shoppingcartVM.OrderHeader.OrderDate = DateTime.Now;
+
+            _unitOfWork.OrderHeader.Add(shoppingcartVM.OrderHeader);
+            _unitOfWork.save();
+
+            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
+            foreach (var item in shoppingcartVM.ShoppingCarts)
+            {
+                OrderDetails orderDetails = new OrderDetails()
+                {
+                    ProductId = item.ProductId,
+                    OrderId = shoppingcartVM.OrderHeader.Id,
+                    Price = item.Price,
+                    Count = item.Count
+                };
+                shoppingcartVM.OrderHeader.OrderTotal += orderDetails.Count * orderDetails.Price;
+                _unitOfWork.OrderDetails.Add(orderDetails);
+                _unitOfWork.save();
+            }
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingcartVM.ShoppingCarts);
+            _unitOfWork.save();
+
+            return RedirectToAction("Orderinformation", "Cart", new { id = shoppingcartVM.OrderHeader.Id });
+
         }
     }
 }
