@@ -158,45 +158,48 @@ namespace HoneyBook.Areas.Customer.Controllers
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-        public IActionResult SummaryPost()
+        public IActionResult SummaryPost(ShoppingCartVM shoppingCartVM)
         {
             var claimIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            var shoppingcartVM = new ShoppingCartVM();
-            shoppingcartVM.OrderHeader.ApplicationUser  
+            shoppingCartVM.OrderHeader.ApplicationUser  
                 = _unitOfWork.ApplicationUser.GetFirstOrDefault(c => c.Id == claim.Value
                 , includeProPerties:"Company");
-            shoppingcartVM.ShoppingCarts 
+            shoppingCartVM.ShoppingCarts 
                 = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value
                 , includeProPerties: "Product");
 
-            shoppingcartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
-            shoppingcartVM.OrderHeader.OrderStatus = SD.StatusPending;
-            shoppingcartVM.OrderHeader.ApplicationUserId = claim.Value;
-            shoppingcartVM.OrderHeader.OrderDate = DateTime.Now;
+            shoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            shoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
+            shoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
+            shoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
 
-            _unitOfWork.OrderHeader.Add(shoppingcartVM.OrderHeader);
+            _unitOfWork.OrderHeader.Add(shoppingCartVM.OrderHeader);
             _unitOfWork.save();
 
             List<OrderDetails> orderDetailsList = new List<OrderDetails>();
-            foreach (var item in shoppingcartVM.ShoppingCarts)
+            foreach (var item in shoppingCartVM.ShoppingCarts)
             {
+                item.Price = SD.GetPriceBaseOnQuantity(item.Count, item.Product.Price, item.Product.Price50, item.Product.Price100);
                 OrderDetails orderDetails = new OrderDetails()
                 {
                     ProductId = item.ProductId,
-                    OrderId = shoppingcartVM.OrderHeader.Id,
+                    OrderId = shoppingCartVM.OrderHeader.Id,
                     Price = item.Price,
                     Count = item.Count
                 };
-                shoppingcartVM.OrderHeader.OrderTotal += orderDetails.Count * orderDetails.Price;
+                shoppingCartVM.OrderHeader.OrderTotal += orderDetails.Count * orderDetails.Price;
                 _unitOfWork.OrderDetails.Add(orderDetails);
                 _unitOfWork.save();
             }
-            _unitOfWork.ShoppingCart.RemoveRange(shoppingcartVM.ShoppingCarts);
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCartVM.ShoppingCarts);
             _unitOfWork.save();
 
-            return RedirectToAction("Orderinformation", "Cart", new { id = shoppingcartVM.OrderHeader.Id });
-
+            return RedirectToAction("Orderinformation", "Cart", new { id = shoppingCartVM.OrderHeader.Id });
+        }
+         public IActionResult Orderinformation (int id)
+        {
+            return View(id);
         }
     }
 }
