@@ -26,10 +26,12 @@ namespace HoneyBook.Areas.Admin.Controllers
         }
 
         #region API CALLS
+        [HttpGet]
         public IActionResult GetOrderList(string status)
         {
             var claimIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             IEnumerable<OrderHeader> OrderList;
 
             if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))

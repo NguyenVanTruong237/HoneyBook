@@ -2,6 +2,7 @@
 using HoneyBook.Models;
 using HoneyBook.Models.ViewModels;
 using HoneyBook.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -19,6 +20,7 @@ using System.Threading.Tasks;
 namespace HoneyBook.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
