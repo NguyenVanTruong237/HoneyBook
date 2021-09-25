@@ -200,7 +200,10 @@ namespace HoneyBook.Areas.Customer.Controllers
 
             if (stripeToken == null)
             {
-
+                //cho các công ty ủy quyền được thanh toán trong 30 ngày
+                shoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusDelayedPayment;
+                shoppingCartVM.OrderHeader.PaymentDueDate = DateTime.Now.AddDays(30);
+                shoppingCartVM.OrderHeader.OrderStatus = SD.StatusApproved;
             }
             else
             {
