@@ -1,9 +1,11 @@
 ﻿@model HoneyBook.Models.ViewModels.OrderDetailsVM
 @using HoneyBook.Utility
+@using Microsoft.Extensions.Options
 
+@inject IOptions<HoneyBook.Utility.StripeSettings> Stripe
 
 <form method="post">
-    <input type="hidden" asp-for="OrderHeader.Id"/>
+    <input type="hidden" asp-for="OrderHeader.Id" />
     <br />
     <div class="backgroundWhite container">
         <div class="card">
@@ -125,7 +127,7 @@
                             <div class="row my-1">
                                 <div class="col-3">Order Date</div>
                                 <div class="col-9">
-                                        <input value="@Model.OrderHeader.OrderDate.ToShortDateString()" type="text" class="form-control" readonly />
+                                    <input value="@Model.OrderHeader.OrderDate.ToShortDateString()" type="text" class="form-control" readonly />
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -133,7 +135,7 @@
                                 <div class="col-9">
                                     @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
                                     {
-                                        <input asp-for="OrderHeader.Carrier" type="text" class="form-control" />
+                                        <input asp-for="OrderHeader.Carrier" id="carrier" type="text" class="form-control" />
 
                                     }
                                     else
@@ -147,7 +149,7 @@
                                 <div class="col-9">
                                     @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
                                     {
-                                        <input asp-for="OrderHeader.TrackingNumber" type="text" class="form-control" />
+                                        <input asp-for="OrderHeader.TrackingNumber" id="trackingNumber" type="text" class="form-control" />
 
                                     }
                                     else
@@ -217,17 +219,69 @@
                                         </div>
                                     </li>
                                 }
-                                    <li class="list-group-item bg-info">
-                                        <div class="row container">
-                                            <div class="col-6">
-                                                <h5 class="text-white">TOTAL </h5>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <h5 class="text-white">$@Model.OrderHeader.OrderTotal</h5>
-                                            </div>
+                                <li class="list-group-item bg-info">
+                                    <div class="row container">
+                                        <div class="col-6">
+                                            <h5 class="text-white">TOTAL </h5>
                                         </div>
-                                    </li>
-                                </ul>
+                                        <div class="col-6 text-right">
+                                            <h5 class="text-white">$@Model.OrderHeader.OrderTotal</h5>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                            {
+                                <br />
+                                @if (Model.OrderHeader.OrderStatus == SD.StatusApproved)
+                                {
+                                    <a asp-action="StartProcessing" asp-route-id="@Model.OrderHeader.Id"
+                                       class="btn btn-primary form-control">Start Processing</a>
+                                }
+                                @if (Model.OrderHeader.OrderStatus == SD.StatusInProcess)
+                                {
+                                    <input type="submit" value="Ship Order" onclick="return validateInput()"
+                                           class="btn btn-primary form-control"
+                                           formaction="/Admin/Order/ShipOrder" formmethod="post" />
+                                }
+                            }
+                            else
+                            {
+                                <label class="btn btn-primary form-control">@Model.OrderHeader.OrderStatus</label>
+                            }
+
+                            @{
+                                var OrderTotalForStripe = Model.OrderHeader.OrderTotal * 100;
+                            }
+
+                            @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatusDelayedPayment &&
+                               Model.OrderHeader.OrderStatus == SD.StatusShipped)
+                            {
+                                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                        data-key="@Stripe.Value.PublishableKey"
+                                        data-amount="@OrderTotalForStripe"
+                                        data-name="Honey Book"
+                                        data-label="Place Order"
+                                        data-description="Get books, For less"
+                                        data-locale="auto"
+                                        data-allow-remember-me="false"
+                                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
+                                </script>
+                                <script>
+                                    document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+                                </script>
+                                <button type="submit" value="Place Order" class="btn btn-success form-control">Pay now</button>
+                            }
+
+                            @if (Model.OrderHeader.OrderStatus != SD.StatusRefunded &&
+                              Model.OrderHeader.OrderStatus != SD.StatusCancelled &&
+                              (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee)))
+                            {
+                                <div class="pt-2">
+                                    <a asp-action="CancelOrder" asp-route-id="@Model.OrderHeader.Id"
+                                       class="btn btn-danger form-control">Cancel order</a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -235,3 +289,25 @@
         </div>
     </div>
 </form>
+
+@section Scripts{
+    <script>
+        function validateInput() {
+            var tracking = document.getElementById("trackingNumber").value;
+            var carrier = document.getElementById("carrier").value;
+            if (tracking.toString() == '') {
+                swal("Error", "Please enter tracking number", "error")
+                return false;
+            }
+            else {
+                if (carrier.toString() == '') {
+                    swal("Error", "Please enter carrier number", "error")
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+        }
+    </script>
+}
