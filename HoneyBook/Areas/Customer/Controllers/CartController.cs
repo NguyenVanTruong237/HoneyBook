@@ -180,7 +180,6 @@ namespace HoneyBook.Areas.Customer.Controllers
             _unitOfWork.OrderHeader.Add(shoppingCartVM.OrderHeader);
             _unitOfWork.save();
 
-            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
             foreach (var item in shoppingCartVM.ShoppingCarts)
             {
                 item.Price = SD.GetPriceBaseOnQuantity(item.Count, item.Product.Price, item.Product.Price50, item.Product.Price100);

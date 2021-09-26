@@ -21,6 +21,7 @@ namespace HoneyBook.Models
         public DateTime ShippingDate { get; set; }
         [Required]
         public double OrderTotal { get; set; }
+        public string TrackingNumber { get; set; }
         public string Carrier { get; set; }
         public string OrderStatus { get; set; }
         public string PaymentStatus { get; set; }

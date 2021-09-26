@@ -1,5 +1,6 @@
 ﻿using HoneyBook.DataAccess.Repository.IRepository;
 using HoneyBook.Models;
+using HoneyBook.Models.ViewModels;
 using HoneyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,20 @@ namespace HoneyBook.Areas.Admin.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        [BindProperty]
+        public OrderDetailsVM OrderDetails { get; set; }
         public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult Details(int id)
+        {
+            OrderDetails = new OrderDetailsVM()
+            {
+                OrderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(c => c.Id == id, includeProPerties:"ApplicationUser"),
+                OrderDetails = _unitOfWork.OrderDetails.GetAll(c => c.OrderId == id, includeProPerties: "Product")
+            };
+            return View(OrderDetails);
         }
 
         #region API CALLS
