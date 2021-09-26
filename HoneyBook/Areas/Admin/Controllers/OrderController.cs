@@ -4,6 +4,7 @@ using HoneyBook.Models.ViewModels;
 using HoneyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,89 @@ namespace HoneyBook.Areas.Admin.Controllers
                 OrderDetails = _unitOfWork.OrderDetails.GetAll(c => c.OrderId == id, includeProPerties: "Product")
             };
             return View(OrderDetails);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Details")]
+        public IActionResult Details(string stripeToken)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(c => c.Id == OrderDetails.OrderHeader.Id, includeProPerties:"ApplicationUser");
+
+            if (stripeToken != null)
+            {
+                var options = new ChargeCreateOptions
+                {
+                    Amount = Convert.ToInt32(orderHeader.OrderTotal * 100),
+                    Currency = "usd",
+                    Description = "Order ID : " + orderHeader.Id,
+                    Source = stripeToken
+                };
+                var service = new ChargeService();
+                Charge charge = service.Create(options);
+                if (charge.BalanceTransactionId == null)
+                {
+                    orderHeader.PaymentStatus = SD.PaymentStatusRejected;
+                }
+                else
+                {
+                    orderHeader.TransactionId = charge.Id;
+                }
+                if (charge.Status.ToLower() == "succeeded")
+                {
+                    orderHeader.PaymentStatus = SD.PaymentStatusApproved;
+                   orderHeader.PaymentDate = DateTime.Now;
+                }
+                _unitOfWork.save();
+            }
+            return RedirectToAction("Details", "Order", new { id = orderHeader.Id });
+        }
+
+        [Authorize(Roles =SD.Role_Admin+","+SD.Role_Employee)]
+        public IActionResult StartProcessing(int id)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id);
+            orderHeader.OrderStatus = SD.StatusInProcess;
+            _unitOfWork.save();
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
+        public IActionResult ShipOrder()
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == OrderDetails.OrderHeader.Id);
+            orderHeader.TrackingNumber = OrderDetails.OrderHeader.TrackingNumber;
+            orderHeader.Carrier = OrderDetails.OrderHeader.Carrier;
+            orderHeader.OrderStatus = SD.StatusShipped;
+            orderHeader.ShippingDate = DateTime.Now;
+            _unitOfWork.save();
+            return RedirectToAction(nameof(Index));
+        }
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
+        public IActionResult CancelOrder(int id)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id);
+            if (orderHeader.PaymentStatus == SD.StatusApproved)
+            {
+                var options = new RefundCreateOptions()
+                {
+                    Amount = Convert.ToInt32(orderHeader.OrderTotal * 100),
+                    Reason = RefundReasons.RequestedByCustomer,
+                    Charge = orderHeader.TransactionId
+                };
+                var service = new RefundService();
+                Refund refund = service.Create(options);
+
+                orderHeader.OrderStatus = SD.StatusRefunded;
+                orderHeader.PaymentStatus = SD.StatusRefunded;
+            }
+            else
+            {
+                orderHeader.OrderStatus = SD.StatusCancelled;
+                orderHeader.PaymentStatus = SD.StatusCancelled;
+            }
+            _unitOfWork.save();
+            return RedirectToAction(nameof(Index));
         }
 
         #region API CALLS
