@@ -24,14 +24,14 @@ namespace HoneyBook.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult Upsert(int? id)
+        public async Task<IActionResult> Upsert(int? id)
         {
             Category category = new Category();
             if (id == null)
             {
                 return View(category);
             }
-            category = _unitOfWork.Category.Get(id.GetValueOrDefault()); //GetValueOrDefault: nếu giá trị id == null sẽ trả về mặc định là null
+            category = await _unitOfWork.Category.GetAsync(id.GetValueOrDefault()); //GetValueOrDefault: nếu giá trị id == null sẽ trả về mặc định là null
             if (category == null)
             {
                 return NotFound();
@@ -40,13 +40,13 @@ namespace HoneyBook.Areas.Admin.Controllers
         }
         [HttpPost] // định tuyến: nhận data từ view(upsert)
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Category category)
+        public async Task<IActionResult> Upsert(Category category)
         {
             if (ModelState.IsValid)
             {
                 if (category.Id == 0)
                 {
-                    _unitOfWork.Category.Add(category);
+                    await _unitOfWork.Category.AddAsync(category);
 
                 }
                 else
@@ -60,20 +60,20 @@ namespace HoneyBook.Areas.Admin.Controllers
         }
         #region API CALLS
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var allObj = _unitOfWork.Category.GetAll();
+            var allObj = await _unitOfWork.Category.GetAllAsync();
             return Json(new { data = allObj });
         }
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var objInDb = _unitOfWork.Category.Get(id);
+            var objInDb = await _unitOfWork.Category.GetAsync(id);
             if (objInDb == null)
             {
                 return Json(new { success = false, message = "Xóa thất bại." });
             }
-            _unitOfWork.Category.Remove(id);
+            await _unitOfWork.Category.RemoveAsync(id);
             _unitOfWork.save();
             return Json(new { success = true, message = "Xóa thành công."});
         }

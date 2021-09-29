@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HoneyBook.DataAccess.Repository 
 {
-    public class CategoryRepository : Repository<Category>, ICategoryRepository
+    public class CategoryRepository : RepositoryAsync<Category>, ICategoryRepository
     {
         private ApplicationDbContext _db;
         public CategoryRepository(ApplicationDbContext db) : base (db) //Base db truyền vào ở lớp cha để dùng các chức năng của lớp cha

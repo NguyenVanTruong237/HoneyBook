@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HoneyBook.DataAccess.Repository.IRepository
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface ICategoryRepository : IRepositoryAsync<Category>
     {
         void Update(Category category);
 
