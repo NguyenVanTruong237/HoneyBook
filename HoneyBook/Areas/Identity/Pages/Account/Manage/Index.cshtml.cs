@@ -54,7 +54,7 @@ namespace HoneyBook.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            var applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(c => c.Id == user.Id, includeProPerties: "Company");
+            var applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(c => c.Id == user.Id);
             Username = userName;
             Input = new InputModel
             {
