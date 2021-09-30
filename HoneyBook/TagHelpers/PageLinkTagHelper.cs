@@ -19,7 +19,7 @@ namespace HoneyBook.TagHelpers
         public PagingInfo PageModel { get; set; }
 
         public string PageAction { get; set; }
-        public bool PageClassesEnabled { get; set; }
+        public bool PageClassedEnabled { get; set; }
         public string PageClass { get; set; }
         public string PageClassNormal { get; set; }
         public string PageClassSelected { get; set; }
@@ -28,11 +28,12 @@ namespace HoneyBook.TagHelpers
         {
             TagBuilder result = new TagBuilder("div");
 
-            for (int i = 1; i < PageModel.TotalPage; i++)
+            for (int i = 1; i <= PageModel.TotalPage; i++)
             {
                 TagBuilder tag = new TagBuilder("a");
                 string url = PageModel.urlParam.Replace(":", i.ToString());
-                if (PageClassesEnabled)
+                tag.Attributes["href"] = url;
+                if (PageClassedEnabled)
                 {
                     tag.AddCssClass(PageClass);
                     tag.AddCssClass(i == PageModel.CurrentPage ? PageClassSelected : PageClassNormal);

@@ -40,7 +40,7 @@ namespace HoneyBook.Areas.Admin.Controllers
                 urlParam = "/Admin/Category/Index?productPage=:"
             };
 
-            return View();
+            return View(categoryVM);
         }
         public async Task<IActionResult> Upsert(int? id)
         {
