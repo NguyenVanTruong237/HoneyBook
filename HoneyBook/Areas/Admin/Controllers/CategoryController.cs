@@ -89,10 +89,13 @@ namespace HoneyBook.Areas.Admin.Controllers
             var objInDb = await _unitOfWork.Category.GetAsync(id);
             if (objInDb == null)
             {
+                TempData["Error"] = "Xóa thất bại.";
                 return Json(new { success = false, message = "Xóa thất bại." });
             }
             await _unitOfWork.Category.RemoveAsync(id);
             _unitOfWork.save();
+
+            TempData["Success"] = "Xóa thành công.";
             return Json(new { success = true, message = "Xóa thành công."});
         }
         #endregion
