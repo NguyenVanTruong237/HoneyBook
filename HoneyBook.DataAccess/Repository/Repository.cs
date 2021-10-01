@@ -45,7 +45,7 @@ namespace HoneyBook.DataAccess.Repository
             }
             if (orderBy != null)
             {
-                return orderBy(query).ToList();     //nếu list data trong oderby không null thì list đó về query
+                return orderBy(query).ToList();     //Lấy data theo order ví dụ (c =>c.Id ==id)
             }
             return query.ToList();
         }
