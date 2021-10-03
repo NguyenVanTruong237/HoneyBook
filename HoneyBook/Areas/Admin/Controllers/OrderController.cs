@@ -37,6 +37,21 @@ namespace HoneyBook.Areas.Admin.Controllers
             };
             return View(OrderDetails);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateOrder (OrderDetailsVM detailsVM)
+        {
+            var objInDb = _unitOfWork.OrderHeader.GetFirstOrDefault(c => c.Id == detailsVM.OrderHeader.Id);
+            if (ModelState.IsValid || objInDb.Carrier ==null || objInDb.TrackingNumber==null)
+            {
+                objInDb.StreetAddress = detailsVM.OrderHeader.StreetAddress;
+                objInDb. City = detailsVM.OrderHeader.City;
+                objInDb.State = detailsVM.OrderHeader.State;
+                objInDb.PostalCode = detailsVM.OrderHeader.PostalCode;
+                _unitOfWork.save();
+            }
+            return RedirectToAction("Details", "Order", new { id = objInDb.Id });
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
