@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using HoneyBook.Utility;
 using Stripe;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using HoneyBook.DataAccess.Initializer;
 
 namespace HoneyBook
 {
@@ -48,6 +49,7 @@ namespace HoneyBook
             services.Configure<BrainTreeSettings>(Configuration.GetSection("BrainTree"));
             services.AddSingleton<IBrainTreeGate, BrainTreeGate>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.ConfigureApplicationCookie(options =>
@@ -79,7 +81,7 @@ namespace HoneyBook
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -100,7 +102,7 @@ namespace HoneyBook
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            dbInitializer.Initializer();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -21,7 +21,7 @@ namespace HoneyBook.DataAccess.Migrations
 
             migrationBuilder.Sql(@"CREATE PROC usp_UpdateCoverType
 	                                @Id int,
-	                                @Name varchar(100)                         //nvarchar để ghi kí tự đặc biệt
+	                                @Name varchar(100)                       
                                     AS 
                                     BEGIN 
                                      UPDATE dbo.CoverTypes
@@ -38,7 +38,7 @@ namespace HoneyBook.DataAccess.Migrations
                                     END");
 
             migrationBuilder.Sql(@"CREATE PROC usp_CreateCoverType
-                                   @Name varchar(100)                           //nvarchar để ghi kí tự đặc biệt
+                                   @Name varchar(100)                          
                                    AS 
                                    BEGIN 
                                     INSERT INTO dbo.CoverTypes(Name)
