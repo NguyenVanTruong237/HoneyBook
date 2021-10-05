@@ -3,7 +3,7 @@
 - SQL Sever Management Studio
 -----------------
 - Login With Facebook, Google
-- Use Repository Pattern (Demo Stored Procedure With Dapper)
+- Use Repository Pattern, Unit Of Work (Demo Stored Procedure With Dapper)
 - Set role for User
 - Send Email Confirm (SendGrid)
 - Add Product To ShoppingCart (Plus, Minus, Delete, Summary)
