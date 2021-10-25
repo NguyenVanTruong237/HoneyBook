@@ -32,7 +32,7 @@ namespace HoneyBook.DataAccess.Repository
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProPerties = null)
         {
             IQueryable<T> query = dbSet;
-            if (filter != null)         // nếu 1 object không null thì trả data về query
+            if (filter != null)         // lọc data (c => c.id == id)
             {
                 query = query.Where(filter);    
             }
@@ -45,7 +45,7 @@ namespace HoneyBook.DataAccess.Repository
             }
             if (orderBy != null)
             {
-                return orderBy(query).ToList();     //Lấy data theo order ví dụ (c =>c.Id ==id)
+                return orderBy(query).ToList();     //sắp sếp data theo order ví dụ (c => c.name == nameObj) order obj theo name sắp xếp theo a -z
             }
             return query.ToList();
         }
@@ -54,7 +54,7 @@ namespace HoneyBook.DataAccess.Repository
         {
             IQueryable<T> query = dbSet;
 
-            if (filter != null)         // nếu 1 object không null thì trả data về query
+            if (filter != null)         // lọc data (c => c.id == id)
             {
                 query = query.Where(filter);
             }
