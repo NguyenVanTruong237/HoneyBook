@@ -2,12 +2,12 @@
 - ASP.NET Core MVC
 - SQL Sever Management Studio
 -----------------
-- Login With Facebook, Google
-- Use Repository Pattern (Demo Stored Procedure With Dapper)
-- Set role for User
-- Send Email Confirm (SendGrid)
+- Use Repository Pattern, Unit Of Work (Demo Stored Procedure With Dapper)
+- Set Role for User, Admin Can Lock and UnLock Another User
 - Add Product To ShoppingCart (Plus, Minus, Delete, Summary)
-- Order Status Change (Approved, InProcess, Shipped, Cancel, Refund)
-- Manage Order in Stripe, Payment With Credit Card and PayPal (Stripe, BrainTree)
+- Admin And Employee Role Can Change Order Status (Approved, InProcess, Shipped, Cancel, Refund)
+- Send Email Confirm Account (SendGrid)
+- Manage Order On Stripe, Payment With Credit Card and PayPal (Stripe, BrainTree)
 - Send SMS To PhoneNumber When Order Success (Twillo)
+- Login With Facebook, Google
 - Custom TagHelpers
