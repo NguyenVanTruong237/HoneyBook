@@ -30,7 +30,7 @@ namespace HoneyBook.DataAccess.Repository
         }
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProPerties = null)
-        {
+        {             //  Expression<Func<T, bool>> filter = null : coi biểu thức lamda như cây biểu thức và không thực thi chúng
             IQueryable<T> query = dbSet;
             if (filter != null)         // lọc data (c => c.id == id)
             {
