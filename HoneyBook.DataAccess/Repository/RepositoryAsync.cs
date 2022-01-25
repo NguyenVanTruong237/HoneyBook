@@ -32,7 +32,7 @@ namespace HoneyBook.DataAccess.Repository
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProPerties = null)
         {
             IQueryable<T> query = dbSet;
-            if (filter != null)         // nếu 1 object không null thì trả data về query
+            if (filter != null)         
             {
                 query = query.Where(filter);    
             }
@@ -40,12 +40,12 @@ namespace HoneyBook.DataAccess.Repository
             {
                 foreach (var includeProp in includeProPerties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))  
                 {
-                    query = query.Include(includeProp); //include để thêm data từ class khác
+                    query = query.Include(includeProp); 
                 }
             }
             if (orderBy != null)
             {
-                return await orderBy(query).ToListAsync();     //nếu list data trong oderby không null thì list đó về query
+                return await orderBy(query).ToListAsync();    
             }
             return await query.ToListAsync();
         }
@@ -54,13 +54,13 @@ namespace HoneyBook.DataAccess.Repository
         {
             IQueryable<T> query = dbSet;
 
-            if (filter != null)         // nếu 1 object không null thì trả data về query
+            if (filter != null)         
             {
                 query = query.Where(filter);
             }
             if (includeProPerties != null)
             {
-                foreach (var includeProp in includeProPerties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))   //cắt data từng thuộc tính của class về query
+                foreach (var includeProp in includeProPerties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))  
                 {
                     query = query.Include(includeProp);
                 }
