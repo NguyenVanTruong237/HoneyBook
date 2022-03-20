@@ -2,22 +2,15 @@
 - ASP.NET Core MVC
 - SQL Sever Management Studio
 -----------------
-- [Use Repository Pattern, Unit Of Work](https://github.com/truong2307/HoneyBook/blob/master/HoneyBook.DataAccess/Repository/RepositoryAsync.cs)
-- [Demo Stored Procedure With Dapper](https://github.com/truong2307/HoneyBook/blob/master/HoneyBook.DataAccess/Repository/SP_Call.cs)
-- Set Role for User, Admin Can Lock and UnLock Another User
-- Add Product To ShoppingCart (Plus, Minus, Delete, Summary)
-- Admin And Employee Role Can Change Order Status (Approved, InProcess, Shipped, Cancel, Refund)
-- Send Email Confirm Account (SendGrid)
-- Manage Order On Stripe, Payment With Credit Card and PayPal (Stripe, BrainTree)
-- Send SMS To PhoneNumber When Order Success (Twillo)
-- Login With Facebook, Google
-- Custom TagHelpers
 
 ## Homepage of admin
 ![homepageadmin](https://drive.google.com/uc?export=view&id=16mvyalGYI-z3qz-kQe6es5tEbLEL7F0w)
 
 ## Homepage of user
 ![homepageuser](https://drive.google.com/uc?export=view&id=16pabqLzfP0LCPN18p_R9GCx0PU_xDTZX)
+
+## Detail of product
+![Detail](https://drive.google.com/uc?export=view&id=1X9rLHyvygvRBRcSW_wDv1Mj2Xae-xpOZ)
 
 ## Shopping cart
 ![shoppingcart](https://drive.google.com/uc?export=view&id=1Zt8AnwQ8Ftru8ZtrfJZ2Tl8mSY-juK2N)
@@ -35,3 +28,14 @@
 ![manage order for admin](https://drive.google.com/uc?export=view&id=1TFCVZ61vf57N5E2Ybuk7baRSrr2YsNNs)
 ![manage order for admin](https://drive.google.com/uc?export=view&id=1IZbqglvkV_NLfhky7wODq2G-VJLX-qCL)
 
+
+- [Use Repository Pattern, Unit Of Work](https://github.com/truong2307/HoneyBook/blob/master/HoneyBook.DataAccess/Repository/RepositoryAsync.cs)
+- [Demo Stored Procedure With Dapper](https://github.com/truong2307/HoneyBook/blob/master/HoneyBook.DataAccess/Repository/SP_Call.cs)
+- Set Role for User, Admin Can Lock and UnLock Another User
+- Add Product To ShoppingCart (Plus, Minus, Delete, Summary)
+- Admin And Employee Role Can Change Order Status (Approved, InProcess, Shipped, Cancel, Refund)
+- Send Email Confirm Account (SendGrid)
+- Manage Order On Stripe, Payment With Credit Card and PayPal (Stripe, BrainTree)
+- Send SMS To PhoneNumber When Order Success (Twillo)
+- Login With Facebook, Google
+- Custom TagHelpers
