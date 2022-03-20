@@ -13,8 +13,11 @@
 - Login With Facebook, Google
 - Custom TagHelpers
 
-## Homepage of admin role
-![homepage](https://drive.google.com/uc?export=view&id=1dmbIDe1huP5AABiKHxfBG3vB54vEgD6H)
+## Homepage of admin
+![homepageadmin](https://drive.google.com/uc?export=view&id=16mvyalGYI-z3qz-kQe6es5tEbLEL7F0w)
+
+## Homepage of user
+![homepageuser](https://drive.google.com/uc?export=view&id=16pabqLzfP0LCPN18p_R9GCx0PU_xDTZX)
 
 ## Shopping cart
 ![shoppingcart](https://drive.google.com/uc?export=view&id=1Zt8AnwQ8Ftru8ZtrfJZ2Tl8mSY-juK2N)
@@ -25,7 +28,10 @@
 ## Manage order on stripe
 ![Manage order on stripe](https://drive.google.com/uc?export=view&id=194gJXFnrE1Y3hI7A-BaOtO_fTSDHmid9)
 
-## Manage order for admin or employee role 
+## Manage user of admin
+![manage user for admin](https://drive.google.com/uc?export=view&id=1X0xSmkUEKUf-dLv_hazoQM8KqOUmV-Jt)
+
+## Manage order for admin or employee 
 ![manage order for admin](https://drive.google.com/uc?export=view&id=1TFCVZ61vf57N5E2Ybuk7baRSrr2YsNNs)
 ![manage order for admin](https://drive.google.com/uc?export=view&id=1IZbqglvkV_NLfhky7wODq2G-VJLX-qCL)
 
